@@ -2,6 +2,14 @@
 
 import cv2
 import getch
+import sys
+
+def print_help():
+    print("USAGE:\n\t./facial_recognition\n\nTOOLS:\n\tpress 'f' -> show the face recognition")
+
+if (len(sys.argv) == 2 and sys.argv[1] == "-h"):
+    print_help()
+    exit(0)
 
 cam = cv2.VideoCapture(0)
 face = 0
@@ -22,7 +30,7 @@ while True:
             for i in range(len(res)):
                 cv2.rectangle(fram, (res[i][0], res[i][1]), (res[i][0] + res[i][2], res[i][1] + res[i][3]), (0, 255, 0), 2)
         except:
-            print("y'a personne")
+            print("il n'y a personne")
     if ( k == 27):
         break
     cv2.imshow("frame", fram)
