@@ -5,7 +5,7 @@ import getch
 import sys
 
 def print_help():
-    print("USAGE:\n\t./facial_recognition\n\nTOOLS:\n\tpress 'f' -> show the face recognition")
+    print("USAGE:\n\t./facial_recognition\n\nTOOLS:\n\tpress 'f' -> show the face recognition\n\tpress 'e' -> show the eyes recognition")
 
 if (len(sys.argv) == 2 and sys.argv[1] == "-h"):
     print_help()
@@ -17,13 +17,7 @@ eye = 0
 while True:
     ret, fram = cam.read()
     k = cv2.waitKey(33)
-    gray_fram = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
-    cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-    res = cascade.detectMultiScale(gray_fram)
 
-    gray_fram1 = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
-    cascade1 = cv2.CascadeClassifier("haarcascade_eye.xml")
-    res1 = cascade1.detectMultiScale(gray_fram1)
 
     if (k == ord('e') and eye == 0):
         print("activated eye")
@@ -32,11 +26,14 @@ while True:
         print("desactivated eye")
         eye = 0
     if (eye == 1):
+        gray_fram1 = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
+        cascade1 = cv2.CascadeClassifier("xml_files/haarcascade_eye.xml")
+        res1 = cascade1.detectMultiScale(gray_fram1)
         try :
             for i in range(len(res1)):
                 cv2.rectangle(fram, (res1[i][0], res1[i][1]), (res1[i][0] + res1[i][2], res1[i][1] + res1[i][3]), (0, 255, 0), 2)
         except:
-            print("il n'y a personne")
+            print("no eyes in front of the camera")
 
 
     if (k == ord('f') and face == 0):
@@ -46,11 +43,14 @@ while True:
         face = 0
         print("desactivated face")
     if (face == 1):
+        gray_fram = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
+        cascade = cv2.CascadeClassifier("xml_files/haarcascade_frontalface_default.xml")
+        res = cascade.detectMultiScale(gray_fram)
         try :
             for i in range(len(res)):
                 cv2.rectangle(fram, (res[i][0], res[i][1]), (res[i][0] + res[i][2], res[i][1] + res[i][3]), (0, 255, 0), 2)
         except:
-            print("il n'y a personne")
+            print("no one in front of the camera")
     if ( k == 27):
         break
     cv2.imshow("frame", fram)
