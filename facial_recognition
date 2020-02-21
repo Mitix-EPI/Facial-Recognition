@@ -13,12 +13,32 @@ if (len(sys.argv) == 2 and sys.argv[1] == "-h"):
 
 cam = cv2.VideoCapture(0)
 face = 0
+eye = 0
 while True:
     ret, fram = cam.read()
     k = cv2.waitKey(33)
     gray_fram = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
     cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
     res = cascade.detectMultiScale(gray_fram)
+
+    gray_fram1 = cv2.cvtColor(fram, cv2.COLOR_BGR2GRAY)
+    cascade1 = cv2.CascadeClassifier("haarcascade_eye.xml")
+    res1 = cascade1.detectMultiScale(gray_fram1)
+
+    if (k == ord('e') and eye == 0):
+        print("activated eye")
+        eye = 1
+    elif (eye == 1 and k == ord('e')):
+        print("desactivated eye")
+        eye = 0
+    if (eye == 1):
+        try :
+            for i in range(len(res1)):
+                cv2.rectangle(fram, (res1[i][0], res1[i][1]), (res1[i][0] + res1[i][2], res1[i][1] + res1[i][3]), (0, 255, 0), 2)
+        except:
+            print("il n'y a personne")
+
+
     if (k == ord('f') and face == 0):
         print("activated face")
         face = 1
